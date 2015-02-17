@@ -2,10 +2,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
- * Encrypts a file using Letter RC4
+ * Encrypts a file using Letter-RC4
  *
  * @author Dylan Bannon <drb2857@rit.edu>
  * 2/13/2015
@@ -22,14 +21,16 @@ public class Encrypt {
         if(args.length != 3) {
             System.err.println("Incorrect number of command line arguments.");
             System.err.println("Usage: java Encrypt <key> <PlainTextFile> <CipherTextFile>");
+            System.exit(0);
         }
         // Store the command line args
         String key = args[0];
         String plainTextFileName = args[1];
         String cipherTextFileName = args[2];
         // Check that the key is properly formatter
-        if(!isKeyProperlyFormatted(key)) {
+        if(!LetterRC4Util.isKeyProperlyFormatted(key)) {
             System.err.println("Key is improperly formatted. Key must be a permutation of the letters A to Z, upper or lower case.");
+            System.err.println("Usage: java Encrypt <key> <PlainTextFile> <CipherTextFile>");
             System.exit(0);
         }
         // initialize the input and output streams and the keystream generator
@@ -40,30 +41,18 @@ public class Encrypt {
             in = new FileInputStream(plainTextFileName);
         } catch (FileNotFoundException e) {
             System.err.println("File '" + plainTextFileName + "' not found.");
+            System.err.println("Usage: java Encrypt <key> <PlainTextFile> <CipherTextFile>");
             System.exit(0);
         }
         try {
             out = new FileOutputStream(cipherTextFileName);
         } catch (FileNotFoundException e) {
             System.err.println("File '" + cipherTextFileName + "' cannot be created.");
+            System.err.println("Usage: java Encrypt <key> <PlainTextFile> <CipherTextFile>");
             System.exit(0);
         }
         // encrypt the file
         encryptFile(generator, in, out);
-    }
-
-    /**
-     * Checks that the supplied key is in the proper format
-     *
-     * @param key the supplied key
-     * @return true if the key is properly formatted, else false
-     */
-    private static boolean isKeyProperlyFormatted(String key) {
-        String alphabet = "abcdefghijklmnopqrstuvwxyz";
-        char[] keyArray = key.toCharArray();
-        Arrays.sort(keyArray);
-        String sortedKey = new String(keyArray);
-        return alphabet.equalsIgnoreCase(sortedKey);
     }
 
     /**
@@ -107,7 +96,6 @@ public class Encrypt {
             System.err.println("Error reading or writing file.");
             System.exit(0);
         }
-
     }
 }
 
