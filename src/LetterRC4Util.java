@@ -61,6 +61,9 @@ public class LetterRC4Util {
     public static boolean isKeyProperlyFormatted(String key) {
         String alphabet = "abcdefghijklmnopqrstuvwxyz";
         char[] keyArray = key.toCharArray();
+        for(int i = 0; i < keyArray.length; i++) {
+            keyArray[i] = Character.toLowerCase(keyArray[i]);
+        }
         Arrays.sort(keyArray);
         String sortedKey = new String(keyArray);
         return alphabet.equalsIgnoreCase(sortedKey);
